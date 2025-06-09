@@ -1,19 +1,26 @@
 class BooksController < ApplicationController
   require "net/http"
   def index
-    url = URI("https://www.googleapis.com/books/v1/volumes?q=pride+inauthor:austen&maxResults=40")
-    res = Net::HTTP.get(url)
-    parsed = JSON.parse(res)
+    uri = URI("https://api.hardcover.app/v1/graphql")
+    body = { "query": "query { search(query: \"#{params[:query]}\", query_type: \"Book\", per_page: 20, page: 1, sort: \"users_count: desc\") { results } }" }.to_json
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == "https"
+    req = Net::HTTP::Post.new(uri)
+    req["Content-Type"] = "application/json"
+    req["Authorization"] = "Bearer #{ENV["HARDCOVER_API_KEY"]}"
+    req.body = body
+    res = http.request(req)
+    parsed = JSON.parse(res.body)
+
     @books = []
-    for book in parsed["items"]
+    for book in parsed["data"]["search"]["results"]["hits"]
+      next if !book["document"]["image"]["url"]
       new_book = {}
-      new_book["title"] = book["volumeInfo"]["title"]
-      new_book["subtitle"] = book["volumeInfo"]["subtitle"]
-      new_book["authors"] = book["volumeInfo"]["authors"]
-      new_book["image_url"] = book["volumeInfo"]["imageLinks"]["thumbnail"] if book["volumeInfo"]["imageLinks"]
-      new_book["average_rating"] = book["volumeInfo"]["averageRating"]
-      new_book["ratings_count"] = book["volumeInfo"]["ratingsCount"]
-      new_book["description"] = book["volumeInfo"]["description"]
+      new_book["title"] = book["document"]["title"]
+      new_book["authors"] = book["document"]["author_names"]
+      new_book["image_url"] = book["document"]["image"]["url"]
+      new_book["average_rating"] = book["document"]["rating"]
+      new_book["ratings_count"] = book["document"]["ratings_count"]
       @books.append(new_book)
     end
   end
