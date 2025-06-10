@@ -23,8 +23,11 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex justify-center">
-      <%= yield %>
+    <main data-controller="dark-mode" class="dark:bg-gray-700">
+      <%= render "layouts/navbar" %>
+      <div class="container mx-auto mt-28 px-5 flex justify-center">
+        <%= yield %>
+      </div>
     </main>
   </body>
 </html>
