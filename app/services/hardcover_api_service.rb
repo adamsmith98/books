@@ -1,4 +1,5 @@
 class HardcoverApiService
+  class ApiError < StandardError; end
   require "net/http"
 
   BASE_URI = URI("https://api.hardcover.app/v1/graphql")
@@ -13,7 +14,14 @@ class HardcoverApiService
     request.body = book_query(query)
 
     response = http.request(request)
-    JSON.parse(response.body)
+    case response
+    when Net::HTTPSuccess
+      extract_books(JSON.parse(response.body))
+    else
+      raise ApiError, "Error: #{response.code} #{response.message}"
+    end
+  rescue SocketError, Timeout::Error => error
+    raise ApiError, "Network error: #{error.message}"
   end
 
   private
@@ -34,5 +42,21 @@ class HardcoverApiService
         }
       TEXT
     }.to_json
+  end
+
+  def self.extract_books(response)
+    books = []
+    for book in response["data"]["search"]["results"]["hits"]
+      next if !book["document"]["image"]["url"]
+      new_book = Book.new(
+        title: book["document"]["title"],
+        authors: book["document"]["author_names"],
+        image_url: book["document"]["image"]["url"],
+        rating: book["document"]["rating"],
+        ratings_count: book["document"]["ratings_count"]
+      )
+      books.append(new_book)
+    end
+    books
   end
 end

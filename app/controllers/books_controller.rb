@@ -1,5 +1,8 @@
 class BooksController < ApplicationController
   def index
-    @books = Book.search(params[:query])
+    @books = HardcoverApiService.query_books(params[:query])
+  rescue HardcoverApiService::ApiError => error
+    @books = []
+    flash[:alert] = error.message
   end
 end
