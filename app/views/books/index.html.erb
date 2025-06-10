@@ -2,8 +2,8 @@
     <h1 class="text-4xl font-bold text-center bg-linear-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Find any book</h1>
     <%= form_with url: root_path, method: :get, class: "relative" do |form| %>
         <%= form.search_field :query, placeholder: "Search...", class: "rounded-2xl border dark:border-0 border-gray-300 dark:bg-black dark:text-gray-100 shadow-xs w-2xl h-16 p-4 pr-10 outline-0 mt-6" %>
-        <%= form.button name: nil, class: "size-8 bg-linear-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 rounded-3xl flex justify-center items-center absolute right-1 bottom-1" do %>
-            <svg class="size-4 stroke-white dark:stroke-black stroke-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <%= form.button name: nil, class: "group size-8 bg-linear-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 rounded-3xl flex justify-center items-center absolute right-1 bottom-1 transition duration-300" do %>
+            <svg class="size-4 stroke-white group-hover:stroke-gray-100 dark:stroke-gray-900 dark:group-hover:stroke-black stroke-3 transition duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
             </svg>
         <% end %>
@@ -36,8 +36,8 @@
                     </div>
                 </div>
             </div>
-            <%= button_to "", class: "group size-10 rounded-3xl border-2 border-indigo-500 hover:bg-indigo-500 flex justify-center items-center mr-2 mt-2" do %>
-                <svg class="stroke-indigo-500 group-hover:stroke-white dark:group-hover:stroke-black size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <%= button_to "", class: "group size-10 rounded-3xl border-2 border-indigo-500 hover:bg-indigo-500 flex justify-center items-center mr-2 mt-2 transition duration-300" do %>
+                <svg class="stroke-indigo-500 group-hover:stroke-white dark:group-hover:stroke-black size-6 transition duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
             <% end %>
