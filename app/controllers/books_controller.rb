@@ -5,4 +5,11 @@ class BooksController < ApplicationController
     @books = []
     flash[:alert] = error.message
   end
+
+  def show
+    @book = HardcoverApiService.find_book(params[:id])
+  rescue HardcoverApiService::ApiError => error
+    flash[:alert] = error.message
+    redirect_to root_path
+  end
 end

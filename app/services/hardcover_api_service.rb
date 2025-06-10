@@ -5,26 +5,39 @@ class HardcoverApiService
   BASE_URI = URI("https://api.hardcover.app/v1/graphql")
 
   def self.query_books(query)
+    response = send_request(book_query(query))
+    extract_books(response["data"]["search"]["results"]["hits"])
+  end
+
+  def self.find_book(id)
+    response = send_request(find_by_id(id))
+    if !response["data"] or !response["data"]["books"][0]
+      raise ApiError, "Error: book not found"
+    end
+    extract_book(response["data"]["books"][0])
+  end
+
+  private
+
+  def self.send_request(body)
     http = Net::HTTP.new(BASE_URI.host, BASE_URI.port)
     http.use_ssl = true if BASE_URI.scheme == "https"
 
     request = Net::HTTP::Post.new(BASE_URI)
     request["Content-Type"] = "application/json"
     request["Authorization"] = "Bearer #{ENV["HARDCOVER_API_KEY"]}"
-    request.body = book_query(query)
+    request.body = body
 
     response = http.request(request)
     case response
     when Net::HTTPSuccess
-      extract_books(JSON.parse(response.body))
+      JSON.parse(response.body)
     else
       raise ApiError, "Error: #{response.code} #{response.message}"
     end
   rescue SocketError, Timeout::Error => error
     raise ApiError, "Network error: #{error.message}"
   end
-
-  private
 
   def self.book_query(query)
     {
@@ -44,19 +57,47 @@ class HardcoverApiService
     }.to_json
   end
 
-  def self.extract_books(response)
-    books = []
-    for book in response["data"]["search"]["results"]["hits"]
-      next if !book["document"]["image"]["url"]
-      new_book = Book.new(
-        title: book["document"]["title"],
-        authors: book["document"]["author_names"],
-        image_url: book["document"]["image"]["url"],
-        rating: book["document"]["rating"],
-        ratings_count: book["document"]["ratings_count"]
-      )
-      books.append(new_book)
+  def self.find_by_id(id)
+    {
+      "query": <<~TEXT
+        query {
+          books(where: {id: {_eq: #{id}}}) {
+            id
+            title
+            description
+            rating
+            ratings_count
+            image {
+              url
+            }
+            contributions {
+              author {
+                  name
+              }
+            }
+          }
+        }
+      TEXT
+    }.to_json
+  end
+
+  def self.extract_books(books)
+    extracted_books = []
+    for book in books
+      extracted_books.append(extract_book(book["document"]))
     end
-    books
+    extracted_books
+  end
+
+  def self.extract_book(book)
+      Book.new(
+        id: book["id"],
+        title: book["title"],
+        description: book["description"],
+        author: book["contributions"][0]["author"]["name"],
+        image_url: book["image"]["url"],
+        rating: book["rating"],
+        ratings_count: book["ratings_count"]
+      )
   end
 end
