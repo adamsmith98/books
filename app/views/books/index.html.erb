@@ -1,7 +1,7 @@
 <div class="flex flex-col mb-4">
     <h1 class="text-4xl font-bold text-center bg-linear-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Find any book</h1>
     <%= form_with url: root_path, method: :get, class: "relative" do |form| %>
-        <%= form.search_field :query, placeholder: "Search...", class: "rounded-2xl border dark:border-0 border-gray-300 dark:bg-black dark:text-gray-100 shadow-xs w-2xl h-16 p-4 pr-10 outline-0 mt-6" %>
+        <%= form.search_field :query, placeholder: "Search...", class: "rounded-2xl border border-gray-300 dark:border-gray-900 dark:bg-gray-900 dark:text-gray-100 shadow-xs w-2xl h-16 p-4 pr-10 outline-0 mt-6" %>
         <%= form.button name: nil, class: "group size-8 bg-linear-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 rounded-3xl flex justify-center items-center absolute right-1 bottom-1 transition duration-300" do %>
             <svg class="size-4 stroke-white group-hover:stroke-gray-100 dark:stroke-gray-900 dark:group-hover:stroke-black stroke-3 transition duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
@@ -17,7 +17,7 @@
         </div>
     <% end %>
     <% @books.each do |book| %>
-        <div class="rounded-2xl border dark:border-0 border-gray-200 dark:bg-black flex justify-between mt-4 w-2xl">
+        <div class="rounded-2xl border border-gray-200 dark:border-gray-900 dark:bg-gray-900 flex justify-between mt-4 w-2xl">
             <div class="flex">
                 <div class="m-2 rounded-xl overflow-hidden shadow-xs shadow-gray-500 hover:ring-2 ring-indigo-500">
                     <%= link_to controller: "books", action: "show", id: book.id do %>

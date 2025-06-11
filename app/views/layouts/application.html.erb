@@ -22,11 +22,14 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body data-controller="dark-mode" class="dark:bg-gray-700">
-    <main>
-      <%= render "layouts/navbar" %>
-      <div class="container mx-auto mt-28 px-5 flex justify-center">
-        <%= yield %>
+  <body class="dark:bg-gray-800 h-screen">
+    <main data-controller="sidebar" class="flex h-full">
+      <%= render "layouts/sidebar" %>
+      <div data-sidebar-target="main" class="overflow-y-auto flex-1 -ml-64 duration-300 delay-200">
+        <%= render "layouts/navbar" %>
+        <div class="container mx-auto mt-28 px-5 flex justify-center">
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>
