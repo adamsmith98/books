@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  allow_unauthenticated_access
+
   def index
     @books = HardcoverApiService.query_books(params[:query])
   rescue HardcoverApiService::ApiError => error

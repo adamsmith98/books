@@ -1,5 +1,24 @@
 <div class="flex flex-col mb-4">
+    <% if flash[:alert] %>
+        <div class="flex w-2xl rounded-md bg-red-400 p-4 mb-4">
+            <svg class="fill-white size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-2 text-white"><%= flash[:alert] %></span>
+        </div>
+    <% end %>
+
+    <% if flash[:success] %>
+        <div class="flex w-2xl rounded-md bg-emerald-500 p-4 mb-4">
+            <svg class="fill-white size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-2 text-white"><%= flash[:success] %></span>
+        </div>
+    <% end %>
+
     <h1 class="text-4xl font-bold text-center bg-linear-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Find any book</h1>
+
     <%= form_with url: root_path, method: :get, class: "relative" do |form| %>
         <%= form.search_field :query, placeholder: "Search...", class: "rounded-2xl border border-gray-300 dark:border-gray-900 dark:bg-gray-900 dark:text-gray-100 shadow-xs w-2xl h-16 p-4 pr-10 outline-0 mt-6" %>
         <%= form.button name: nil, class: "group size-8 bg-linear-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 rounded-3xl flex justify-center items-center absolute right-1 bottom-1 transition duration-300" do %>
@@ -8,14 +27,7 @@
             </svg>
         <% end %>
     <% end %>
-    <% if flash[:alert] %>
-        <div class="flex w-2xl rounded-md bg-red-400 p-4 mt-4">
-            <svg class="fill-white size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-            </svg>
-            <span class="ml-2 text-white"><%= flash[:alert] %></span>
-        </div>
-    <% end %>
+
     <% @books.each do |book| %>
         <div class="rounded-2xl border border-gray-200 dark:border-gray-900 dark:bg-gray-900 flex justify-between mt-4 w-2xl">
             <div class="flex">
@@ -28,11 +40,10 @@
                         <% end %>
                     <% end %>
                 </div>
+
                 <div class="flex flex-col justify-center ml-4 py-4">
                     <h2 class="text-2xl text-gray-600 dark:text-gray-200 font-medium hover:underline underline-offset-1"><%= link_to book.title.truncate(45), controller: "books", action: "show", id: book.id %></h2>
-                    <p class="text-gray-500 dark:text-gray-400 font-light">
-                        <%= book.author %>
-                    </p>
+                    <p class="text-gray-500 dark:text-gray-400 font-light"><%= book.author %></p>
                     <div class="flex mt-1">
                         <svg class="size-5 fill-amber-300 stroke-gray-600 dark:stroke-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
@@ -42,6 +53,7 @@
                     </div>
                 </div>
             </div>
+
             <%= button_to "", class: "group size-10 rounded-3xl border-2 border-indigo-500 hover:bg-indigo-500 flex justify-center items-center mr-2 mt-2 transition duration-300" do %>
                 <svg class="stroke-indigo-500 group-hover:stroke-white dark:group-hover:stroke-black size-6 transition duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
