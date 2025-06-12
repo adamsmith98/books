@@ -1,7 +1,17 @@
 <div data-sidebar-target="sidebar" class="p-6 h-full overflow-y-auto bg-gray-50 dark:bg-gray-900 border-r-1 border-gray-200 dark:border-gray-700 w-64 transition-transform duration-300 delay-200 transform -translate-x-full">
     <h2 class="uppercase text-sm text-gray-600 dark:text-gray-300 mb-4">My lists</h2>
-    <ul class="dark:text-white">
-        <li class="text-gray-800 dark:text-gray-200 my-1 p-2 w-52 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 duration-300">List 1</li>
-        <li class="text-gray-800 dark:text-gray-200 my-1 p-2 w-52 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 duration-300">List 2</li>
-    </ul>
+    <% if authenticated? %>
+        <ul class="dark:text-white">
+            <%= turbo_frame_tag "lists" do %>
+                <%= render @lists %>
+            <% end %>
+        </ul>
+        <%= turbo_frame_tag List.new %>
+        <%= link_to new_list_path, data: { turbo_frame: dom_id(List.new) }, class: "flex items-center rounded-md bg-indigo-500 hover:bg-indigo-600 duration-300 mt-4" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 fill-white mx-2">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-white py-2">New list</span>
+        <% end %>
+    <% end %>
 </div>

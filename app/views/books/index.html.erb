@@ -31,7 +31,7 @@
     <% @books.each do |book| %>
         <div class="rounded-2xl border border-gray-200 dark:border-gray-900 dark:bg-gray-900 flex justify-between mt-4 w-2xl">
             <div class="flex">
-                <div class="m-2 rounded-xl overflow-hidden shadow-xs shadow-gray-500 hover:ring-2 ring-indigo-500">
+                <div class="w-16 h-24 m-2 rounded-xl overflow-hidden shadow-xs shadow-gray-500 hover:ring-2 ring-indigo-500">
                     <%= link_to controller: "books", action: "show", id: book.id do %>
                         <% if book.image_url %>
                             <%= image_tag book.image_url, class: "w-16 h-24 object-cover" %>
@@ -41,8 +41,10 @@
                     <% end %>
                 </div>
 
-                <div class="flex flex-col justify-center ml-4 py-4">
-                    <h2 class="text-2xl text-gray-600 dark:text-gray-200 font-medium hover:underline underline-offset-1"><%= link_to book.title.truncate(45), controller: "books", action: "show", id: book.id %></h2>
+                <div class="flex flex-col justify-center w-lg ml-4 py-4">
+                    <%= link_to controller: "books", action: "show", id: book.id do %>
+                        <h2 class="text-2xl text-gray-600 dark:text-gray-200 font-medium hover:underline underline-offset-1 truncate"><%= book.title %></h2>
+                    <% end %>
                     <p class="text-gray-500 dark:text-gray-400 font-light"><%= book.author %></p>
                     <div class="flex mt-1">
                         <svg class="size-5 fill-amber-300 stroke-gray-600 dark:stroke-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
